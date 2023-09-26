@@ -1,33 +1,37 @@
-// routes/people.js
-
-///////////////////////////////
-// DEPENDENCIES
-////////////////////////////////
-
-const express = require('express')
-const router = express.Router()
-
-const carsCtrl = require('../controllers/cars')
-
-///////////////////////////////
-// ROUTES
-////////////////////////////////
-
-// PEOPLE INDEX ROUTE
-router.get("/", carsCtrl.index);
-
-// PEOPLE CREATE ROUTE
-router.post("/", carsCtrl.create);
-
-// PEOPLE SHOW ROUTE
-router.get("/:id", carsCtrl.show);
 
 
-router.delete("/:id", carsCtrl.delete);
+const express = require('express');
+const router = express.Router();
+const { CarsController, register, login, getAllPosts, createPost, createComment } = require('./controllers');
 
 
-router.put("/:id", carsCtrl.update);
+router.get('/', CarsController.index);
 
 
-module.exports = router
+router.post('/', CarsController.create);
 
+
+router.get('/:id', CarsController.show);
+
+
+router.put('/:id', CarsController.update);
+
+
+router.delete('/:id', CarsController.delete);
+
+
+router.post('/register', register);
+
+
+router.post('/login', login);
+
+
+router.get('/posts', getAllPosts);
+
+
+router.post('/posts', createPost);
+
+
+router.post('/comments', createComment);
+
+module.exports = router;
