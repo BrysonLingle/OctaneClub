@@ -1,24 +1,7 @@
-
-
-const Cars = require('./models/cars'); 
-const User = require('./models/user'); 
-
-module.exports = {
- 
-    createComment,
-    register,
-    login,
-    getAllPosts,
-    createPost,
-    createComment,
-    delete: destroy,
-    update,
-  };
-  
+const Cars = require('../models/cars');
 
 const register = async (req, res) => {
   try {
-
     const newUser = new User(req.body);
     await newUser.save();
     res.status(201).json(newUser);
@@ -28,20 +11,17 @@ const register = async (req, res) => {
   }
 };
 
-
 const login = async (req, res) => {
   try {
-
+    // Implement login logic here
   } catch (error) {
     console.error('Error logging in:', error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
 
-
 const getAllPosts = async (req, res) => {
   try {
-
     const posts = await Cars.find();
     res.json(posts);
   } catch (error) {
@@ -50,10 +30,8 @@ const getAllPosts = async (req, res) => {
   }
 };
 
-
 const createPost = async (req, res) => {
   try {
- 
     const { name, image, title } = req.body;
     const newPost = new Cars({ name, image, title });
     await newPost.save();
@@ -64,41 +42,48 @@ const createPost = async (req, res) => {
   }
 };
 
+const update = async (req, res) => {
+  try {
+    const { name, image, title } = req.body;
+    const updatedCar = await Cars.findByIdAndUpdate(req.params.id, { name, image, title }, { new: true });
+    if (!updatedCar) {
+      return res.status(404).json({ error: 'Car not found' });
+    }
+    res.json(updatedCar);
+  } catch (error) {
+    console.error('Error updating a car:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
+const destroy = async (req, res) => {
+  try {
+    const deletedCar = await Cars.findByIdAndRemove(req.params.id);
+    if (!deletedCar) {
+      return res.status(404).json({ error: 'Car not found' });
+    }
+    res.json(deletedCar);
+  } catch (error) {
+    console.error('Error deleting a car:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
 const createComment = async (req, res) => {
   try {
-
+    // Implement create comment logic here
   } catch (error) {
     console.error('Error creating a comment:', error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
 
-const update = async (req, res) => {
-    try {
-      
-      const { name, image, title } = req.body;
-      const updatedCar = await Cars.findByIdAndUpdate(req.params.id, { name, image, title }, { new: true });
-      if (!updatedCar) {
-        return res.status(404).json({ error: 'Car not found' });
-      }
-      res.json(updatedCar);
-    } catch (error) {
-      console.error('Error updating a car:', error);
-      res.status(500).json({ error: 'Internal Server Error' });
-    }
-  };
-  
-  
-  const destroy = async (req, res) => {
-    try {
-      
-      const deletedCar = await Cars.findByIdAndRemove(req.params.id);
-      if (!deletedCar) {
-        return res.status(404).json({ error: 'Car not found' });
-      }
-      res.json(deletedCar);
-    } catch (error) {
-      console.error('Error deleting a car:', error);
-      res.status(500).json({ error: 'Internal Server Error' });
-    }
-  };
+module.exports = {
+  register,
+  login,
+  getAllPosts,
+  createPost,
+  createComment,
+  destroy,
+  update,
+};
